@@ -30,8 +30,9 @@ class ViewController: UIViewController {
         t.translatesAutoresizingMaskIntoConstraints = false
         t.delegate = self
         t.dataSource = self
-        t.backgroundColor = .white
-        t.separatorColor = .white
+        t.backgroundColor = .clear
+        t.separatorColor = .clear
+        t.register(ExcerciseCell.self, forCellReuseIdentifier: ExcerciseCell.identifier)
         return t
     }()
 
@@ -60,7 +61,6 @@ class ViewController: UIViewController {
             selected += 1
             table.reloadData()
         }
-        print("next")
     }
 
 }
@@ -68,16 +68,17 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ExcerciseCell") ?? UITableViewCell()
-        cell.textLabel?.text = excercises[indexPath.row]
-        if (indexPath.row == selected) {
-            cell.backgroundColor = .darkGray
-        }
+        let cell = (tableView.dequeueReusableCell(withIdentifier: ExcerciseCell.identifier) ?? ExcerciseCell()) as! ExcerciseCell
+        cell.setTitle(excercises[indexPath.row], isCurrent: indexPath.row == selected)
         return cell
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         excercises.count
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
     }
 }
 
