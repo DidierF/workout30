@@ -9,11 +9,75 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let excercises = [
+        "ex 1", "ex 2", "ex 3", "ex 4"
+    ]
+    var selected = 0
+
+    lazy var nextButton: UIButton = {
+        let b = UIButton()
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        b.setTitle("Next", for: .normal)
+        b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
+        b.backgroundColor = UIColor.init(displayP3Red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+
+        return b
+    }()
+
+    lazy var table: UITableView = {
+        let t = UITableView()
+        t.translatesAutoresizingMaskIntoConstraints = false
+        t.delegate = self
+        t.dataSource = self
+        t.backgroundColor = .white
+        t.separatorColor = .white
+        return t
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .white
+        navigationItem.title = "Workout"
+
+        view.addSubviews([nextButton, table])
+
+        NSLayoutConstraint.activate([
+            table.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            table.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            table.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+
+            nextButton.topAnchor.constraint(equalTo: table.bottomAnchor),
+            nextButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            nextButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
     }
 
+    @objc private func onNextPress() {
+        if (selected < excercises.count - 1) {
+            selected += 1
+            table.reloadData()
+        }
+        print("next")
+    }
 
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ExcerciseCell") ?? UITableViewCell()
+        cell.textLabel?.text = excercises[indexPath.row]
+        if (indexPath.row == selected) {
+            cell.backgroundColor = .darkGray
+        }
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        excercises.count
+    }
 }
 
