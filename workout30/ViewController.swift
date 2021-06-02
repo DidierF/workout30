@@ -12,13 +12,13 @@ class ViewController: UIViewController {
     let excercises = [
         "ex 1", "ex 2", "ex 3", "ex 4"
     ]
-    var selected = 0
+    var selected = -1
 
     lazy var nextButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
         b.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        b.setTitle("Next", for: .normal)
+        b.setTitle("Start", for: .normal)
         b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
         b.backgroundColor = UIColor.init(displayP3Red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
 
@@ -57,10 +57,17 @@ class ViewController: UIViewController {
     }
 
     @objc private func onNextPress() {
-        if (selected < excercises.count - 1) {
+        if selected == excercises.count - 1 {
+            selected = -1
+            nextButton.setTitle("Start", for: .normal)
+        } else if selected < excercises.count - 1 {
+            nextButton.setTitle("Next", for: .normal)
             selected += 1
-            table.reloadData()
+            if selected == excercises.count - 1 {
+                nextButton.setTitle("Finish", for: .normal)
+            }
         }
+        table.reloadData()
     }
 
 }
