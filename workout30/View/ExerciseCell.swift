@@ -74,6 +74,14 @@ class ExerciseCell: UITableViewCell {
         return l
     }()
 
+    private lazy var divider: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        let c: CGFloat = 0.9
+        v.backgroundColor = .init(red: c, green: c, blue: c, alpha: 1)
+        return v
+    }()
+
     var heightConstraint: NSLayoutConstraint?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -87,7 +95,7 @@ class ExerciseCell: UITableViewCell {
     }
 
     private func setupView() {
-        contentView.addSubviews([label, _time])
+        contentView.addSubviews([label, _time, divider])
         heightConstraint = contentView.heightAnchor.constraint(equalToConstant: 44)
         heightConstraint!.priority = .defaultLow
         NSLayoutConstraint.activate([
@@ -98,7 +106,11 @@ class ExerciseCell: UITableViewCell {
 
             _time.centerYAnchor.constraint(equalTo: label.centerYAnchor),
             _time.leftAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 8),
-            _time.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16)
+            _time.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+
+            divider.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            divider.heightAnchor.constraint(equalToConstant: 1),
+            divider.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
