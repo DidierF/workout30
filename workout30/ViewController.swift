@@ -13,6 +13,12 @@ class ViewController: UIViewController {
         "ex 1", "ex 2", "ex 3", "ex 4"
     ]
     var selected = -1
+    let exTime = 20
+    let restTime = 10
+
+    // Timers
+    // Rest
+    // Strings
 
     lazy var nextButton: UIButton = {
         let b = UIButton()
@@ -32,7 +38,7 @@ class ViewController: UIViewController {
         t.dataSource = self
         t.backgroundColor = .clear
         t.separatorColor = .clear
-        t.register(ExcerciseCell.self, forCellReuseIdentifier: ExcerciseCell.identifier)
+        t.register(ExerciseCell.self, forCellReuseIdentifier: ExerciseCell.identifier)
         return t
     }()
 
@@ -75,8 +81,9 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = (tableView.dequeueReusableCell(withIdentifier: ExcerciseCell.identifier) ?? ExcerciseCell()) as! ExcerciseCell
+        let cell = (tableView.dequeueReusableCell(withIdentifier: ExerciseCell.identifier) ?? ExerciseCell()) as! ExerciseCell
         cell.setTitle(excercises[indexPath.row], isCurrent: indexPath.row == selected)
+        cell.time = indexPath.row >= selected ? exTime : 0
         return cell
     }
 

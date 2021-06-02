@@ -7,15 +7,43 @@
 
 import UIKit
 
-class ExcerciseCell: UITableViewCell {
-    static let identifier = String(describing: ExcerciseCell.self)
+enum ExerciseState {
+    case NotStarted
+    case Running
+    case Ended
+}
+
+class ExerciseCell: UITableViewCell {
+    static let identifier = String(describing: ExerciseCell.self)
 
     var isCurrent: Bool = false
+    var state: ExerciseState = .NotStarted
 
-    lazy var label: UILabel = {
+    var time: Int {
+        set {
+            let seconds = newValue % 60
+            let minutes = newValue / 60
+
+            _time.text = String(format:"%02d:%02d", minutes, seconds)
+        }
+
+        get {
+            Int(_time.text ?? "") ?? 0
+        }
+    }
+
+    private lazy var label: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = "Excercise"
+        return l
+    }()
+
+    private lazy var _time: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "00:00"
+        l.textAlignment = .right
         return l
     }()
 
@@ -27,19 +55,23 @@ class ExcerciseCell: UITableViewCell {
     }
 
     required init?(coder: NSCoder) {
-        super.init(style: .default, reuseIdentifier: ExcerciseCell.identifier)
+        super.init(style: .default, reuseIdentifier: ExerciseCell.identifier)
         setupView()
     }
 
     private func setupView() {
-        contentView.addSubviews([label])
+        contentView.addSubviews([label, _time])
         heightConstraint = contentView.heightAnchor.constraint(equalToConstant: 44)
         heightConstraint!.priority = .defaultLow
         NSLayoutConstraint.activate([
             heightConstraint!,
             label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             label.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-            label.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16)
+            label.rightAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -8),
+
+            _time.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+            _time.leftAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 8),
+            _time.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16)
         ])
     }
 
