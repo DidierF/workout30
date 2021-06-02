@@ -82,8 +82,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = (tableView.dequeueReusableCell(withIdentifier: ExerciseCell.identifier) ?? ExerciseCell()) as! ExerciseCell
-        cell.setTitle(excercises[indexPath.row], isCurrent: indexPath.row == selected)
-        cell.time = indexPath.row >= selected ? exTime : 0
+        let row = indexPath.row
+        cell.title = excercises[row]
+        cell.time = row >= selected && selected != -1 ? exTime : 0
+        if row <= selected {
+            cell.cycleState()
+        }
         return cell
     }
 

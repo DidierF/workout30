@@ -7,28 +7,55 @@
 
 import UIKit
 
-enum ExerciseState {
-    case NotStarted
-    case Running
-    case Ended
-}
-
 class ExerciseCell: UITableViewCell {
     static let identifier = String(describing: ExerciseCell.self)
+    var timer: Timer?
 
-    var isCurrent: Bool = false
-    var state: ExerciseState = .NotStarted
+    var state: ExerciseState = .NotStarted {
+        didSet {
+            switch state {
+            case .NotStarted:
+                backgroundColor = .white
+                label.textColor = .black
+                break
+            case .Running:
+                heightConstraint?.constant = 80
+                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] (timer) in
+                    self?.time -= Int(timer.timeInterval)
+                }
+                timer?.fire()
+                backgroundColor = .systemGreen
+                break
+            case .Ended:
+                backgroundColor = .lightGray
+                label.textColor = .white
+                _time.textColor = .white
+                heightConstraint?.constant = 44
+                timer?.invalidate()
+                break
+            }
+        }
+    }
 
-    var time: Int {
+    var title: String {
         set {
-            let seconds = newValue % 60
-            let minutes = newValue / 60
+            label.text = newValue
+        }
+        get {
+            label.text ?? ""
+        }
+    }
+
+    var time: Int = 0 {
+        didSet {
+            let seconds = time % 60
+            let minutes = time / 60
 
             _time.text = String(format:"%02d:%02d", minutes, seconds)
-        }
+            if time == 0 {
+                timer?.invalidate()
+            }
 
-        get {
-            Int(_time.text ?? "") ?? 0
         }
     }
 
@@ -75,10 +102,12 @@ class ExerciseCell: UITableViewCell {
         ])
     }
 
-    func setTitle(_ title: String, isCurrent: Bool) {
-        self.isCurrent = isCurrent
-        self.label.text = title
-        contentView.backgroundColor = isCurrent ? .darkGray : .white
-        heightConstraint?.constant = isCurrent ? 80 : 44
+    func cycleState() {
+        switch state {
+        case .NotStarted:
+            state = .Running
+        default:
+            state = .Ended
+        }
     }
 }
