@@ -9,9 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    let excercises = [
-        "ex 1", "ex 2", "ex 3", "ex 4"
-    ]
+    let excercises = WorkoutService().getWorkout()
     var selected = -1
     let exTime = 20
     let restTime = 10
@@ -81,8 +79,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = (tableView.dequeueReusableCell(withIdentifier: ExerciseCell.identifier) ?? ExerciseCell()) as! ExerciseCell
         let row = indexPath.row
-        cell.title = excercises[row]
-        cell.time = row >= selected && selected != -1 ? exTime : 0
+        let ex = excercises[row]
+        cell.title = ex.name
+        cell.time = ex.time
         if row <= selected {
             cell.cycleState()
         }

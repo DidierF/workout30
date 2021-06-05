@@ -18,6 +18,8 @@
 		3ACCA262266AF11B005DB59C /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 3ACCA261266AF11B005DB59C /* swiftgen.yml */; };
 		3ACCA264266AFA04005DB59C /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACCA263266AFA04005DB59C /* Strings.swift */; };
 		3ACCA267266AFB19005DB59C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3ACCA265266AFB19005DB59C /* Localizable.strings */; };
+		3AD5719A266C095B00FAA9DA /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD57199266C095B00FAA9DA /* Exercise.swift */; };
+		3AD5719D266C0BD200FAA9DA /* WorkoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD5719C266C0BD200FAA9DA /* WorkoutService.swift */; };
 		E22FB60B652F2126A4B33A5E /* Pods_workout30.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93BFA55BC5CA82133CA0E150 /* Pods_workout30.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +37,8 @@
 		3ACCA261266AF11B005DB59C /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
 		3ACCA263266AFA04005DB59C /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		3ACCA266266AFB19005DB59C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3AD57199266C095B00FAA9DA /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+		3AD5719C266C0BD200FAA9DA /* WorkoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutService.swift; sourceTree = "<group>"; };
 		6412714615DAF6083FE22844 /* Pods-workout30.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-workout30.release.xcconfig"; path = "Target Support Files/Pods-workout30/Pods-workout30.release.xcconfig"; sourceTree = "<group>"; };
 		93BFA55BC5CA82133CA0E150 /* Pods_workout30.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_workout30.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E79E13B20D19D1784DA32A5 /* Pods-workout30.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-workout30.debug.xcconfig"; path = "Target Support Files/Pods-workout30/Pods-workout30.debug.xcconfig"; sourceTree = "<group>"; };
@@ -73,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				3A7B00BC2667D5A9000C9F7F /* ExerciseState.swift */,
+				3AD57199266C095B00FAA9DA /* Exercise.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -99,6 +104,7 @@
 		3ABB86862666C80200311389 /* workout30 */ = {
 			isa = PBXGroup;
 			children = (
+				3AD5719B266C0BBA00FAA9DA /* Data */,
 				3ACCA268266AFBEF005DB59C /* Resources */,
 				3A7B00BB2667D599000C9F7F /* Model */,
 				3A7B00B52666CF29000C9F7F /* View */,
@@ -119,6 +125,14 @@
 				3ABB86902666C80300311389 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		3AD5719B266C0BBA00FAA9DA /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				3AD5719C266C0BD200FAA9DA /* WorkoutService.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		A95654EE2049D13D6B22B38B /* Pods */ = {
@@ -255,6 +269,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3ABB868C2666C80200311389 /* ViewController.swift in Sources */,
+				3AD5719D266C0BD200FAA9DA /* WorkoutService.swift in Sources */,
+				3AD5719A266C095B00FAA9DA /* Exercise.swift in Sources */,
 				3A7B00BD2667D5A9000C9F7F /* ExerciseState.swift in Sources */,
 				3ABB86882666C80200311389 /* AppDelegate.swift in Sources */,
 				3A7B00B82666CF53000C9F7F /* UIView+Extension.swift in Sources */,
