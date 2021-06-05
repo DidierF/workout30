@@ -11,8 +11,6 @@ class ViewController: UIViewController {
 
     let excercises = WorkoutService().getWorkout()
     var selected = -1
-    let exTime = 20
-    let restTime = 10
 
     let strings = L10n.Workout.self
 
