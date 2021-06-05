@@ -9,7 +9,9 @@ import UIKit
 
 class ExerciseCell: UITableViewCell {
     static let identifier = String(describing: ExerciseCell.self)
-    var timer: Timer?
+    lazy var timer: Timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+        self.time -= 1
+    })
 
     var state: ExerciseState = .NotStarted {
         didSet {
@@ -17,22 +19,26 @@ class ExerciseCell: UITableViewCell {
             case .NotStarted:
                 backgroundColor = .white
                 label.textColor = .black
-                break
             case .Running:
                 heightConstraint?.constant = 80
-                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] (timer) in
-                    self?.time -= Int(timer.timeInterval)
-                }
-                timer?.fire()
+                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+                    self.time -= 1
+                })
+                timer.fire()
                 backgroundColor = .systemGreen
-                break
+            case .Resting:
+                label.text = L10n.Exercise.rest
+                time = 10
+                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+                    self.time -= 1
+                })
+                timer.fire()
             case .Ended:
                 backgroundColor = .lightGray
                 label.textColor = .white
                 _time.textColor = .white
                 heightConstraint?.constant = 44
-                timer?.invalidate()
-                break
+                timer.invalidate()
             }
         }
     }
@@ -53,7 +59,10 @@ class ExerciseCell: UITableViewCell {
 
             _time.text = String(format:"%02d:%02d", minutes, seconds)
             if time == 0 {
-                timer?.invalidate()
+                timer.invalidate()
+                if state == .Running {
+                    state = .Resting
+                }
             }
 
         }
@@ -62,7 +71,7 @@ class ExerciseCell: UITableViewCell {
     private lazy var label: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "Excercise"
+        l.text = L10n.Exercise.exercise
         return l
     }()
 

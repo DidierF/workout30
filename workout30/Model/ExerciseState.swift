@@ -10,5 +10,6 @@ import Foundation
 enum ExerciseState {
     case NotStarted
     case Running
+    case Resting
     case Ended
 }

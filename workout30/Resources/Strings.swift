@@ -11,6 +11,13 @@ import Foundation
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
 
+  internal enum Exercise {
+    /// Exercise
+    internal static let exercise = L10n.tr("Localizable", "exercise.exercise")
+    /// Rest
+    internal static let rest = L10n.tr("Localizable", "exercise.rest")
+  }
+
   internal enum Workout {
     /// Workout
     internal static let title = L10n.tr("Localizable", "workout.title")
