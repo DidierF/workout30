@@ -16,9 +16,6 @@ class ViewController: UIViewController {
     let exTime = 20
     let restTime = 10
 
-    // Timers
-    // Rest
-    // Strings
     let strings = L10n.Workout.self
 
     lazy var nextButton: UIButton = {
