@@ -19,12 +19,13 @@ class ViewController: UIViewController {
     // Timers
     // Rest
     // Strings
+    let strings = L10n.Workout.self
 
     lazy var nextButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
         b.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        b.setTitle("Start", for: .normal)
+        b.setTitle(strings.Button.start, for: .normal)
         b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
         b.backgroundColor = UIColor.init(displayP3Red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
 
@@ -45,7 +46,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.title = "Workout"
+        navigationItem.title = strings.title
 
         view.addSubviews([nextButton, table])
 
@@ -65,12 +66,12 @@ class ViewController: UIViewController {
     @objc private func onNextPress() {
         if selected == excercises.count - 1 {
             selected = -1
-            nextButton.setTitle("Start", for: .normal)
+            nextButton.setTitle(strings.Button.start, for: .normal)
         } else if selected < excercises.count - 1 {
-            nextButton.setTitle("Next", for: .normal)
+            nextButton.setTitle(strings.Button.next, for: .normal)
             selected += 1
             if selected == excercises.count - 1 {
-                nextButton.setTitle("Finish", for: .normal)
+                nextButton.setTitle(strings.Button.finish, for: .normal)
             }
         }
         table.reloadData()
