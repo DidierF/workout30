@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseStorage
+import FirebaseUI
 
 class ViewController: UIViewController {
 
@@ -13,6 +15,7 @@ class ViewController: UIViewController {
     var selected = -1
 
     let strings = L10n.Workout.self
+    let storage = Storage.storage()
 
     lazy var nextButton: UIButton = {
         let b = UIButton()
@@ -80,6 +83,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let ex = excercises[row]
         cell.title = ex.name
         cell.time = ex.time
+        let pathReference = storage.reference(withPath: ex.image)
+        cell.image.sd_setImage(with: pathReference, placeholderImage: nil)
         if row <= selected {
             cell.cycleState()
         }

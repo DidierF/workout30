@@ -20,7 +20,6 @@ class ExerciseCell: UITableViewCell {
                 backgroundColor = .white
                 label.textColor = .black
             case .Running:
-                heightConstraint?.constant = 80
                 timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
                     self.time -= 1
                 })
@@ -37,7 +36,6 @@ class ExerciseCell: UITableViewCell {
                 backgroundColor = .lightGray
                 label.textColor = .white
                 _time.textColor = .white
-                heightConstraint?.constant = 44
                 timer.invalidate()
             }
         }
@@ -91,7 +89,12 @@ class ExerciseCell: UITableViewCell {
         return v
     }()
 
-    var heightConstraint: NSLayoutConstraint?
+    lazy var image: UIImageView = {
+        let i = UIImageView()
+        i.translatesAutoresizingMaskIntoConstraints = false
+        i.backgroundColor = .blue
+        return i
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -104,14 +107,17 @@ class ExerciseCell: UITableViewCell {
     }
 
     private func setupView() {
-        contentView.addSubviews([label, _time, divider])
-        heightConstraint = contentView.heightAnchor.constraint(equalToConstant: 44)
-        heightConstraint!.priority = .defaultLow
+        contentView.addSubviews([label, _time, image, divider])
         NSLayoutConstraint.activate([
-            heightConstraint!,
-            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            image.topAnchor.constraint(equalTo: contentView.topAnchor),
+            image.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            image.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+            image.heightAnchor.constraint(equalToConstant: 200),
+
+            label.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 24),
             label.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             label.rightAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -8),
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
 
             _time.centerYAnchor.constraint(equalTo: label.centerYAnchor),
             _time.leftAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 8),
