@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A12A0802670536200B22B01 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A12A07F2670536200B22B01 /* GoogleService-Info.plist */; };
+		3A12A082267053A000B22B01 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 3A12A081267053A000B22B01 /* Podfile */; };
 		3A7B00B82666CF53000C9F7F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00B72666CF53000C9F7F /* UIView+Extension.swift */; };
 		3A7B00BA2666EB4B000C9F7F /* ExerciseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00B92666EB4B000C9F7F /* ExerciseCell.swift */; };
 		3A7B00BD2667D5A9000C9F7F /* ExerciseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00BC2667D5A9000C9F7F /* ExerciseState.swift */; };
@@ -24,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A12A07F2670536200B22B01 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3A12A081267053A000B22B01 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		3A7B00B72666CF53000C9F7F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		3A7B00B92666EB4B000C9F7F /* ExerciseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCell.swift; sourceTree = "<group>"; };
 		3A7B00BC2667D5A9000C9F7F /* ExerciseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseState.swift; sourceTree = "<group>"; };
@@ -85,6 +89,7 @@
 		3ABB867B2666C80200311389 = {
 			isa = PBXGroup;
 			children = (
+				3A12A081267053A000B22B01 /* Podfile */,
 				3ACCA261266AF11B005DB59C /* swiftgen.yml */,
 				3ABB86862666C80200311389 /* workout30 */,
 				3ABB86852666C80200311389 /* Products */,
@@ -113,6 +118,7 @@
 				3ABB868B2666C80200311389 /* ViewController.swift */,
 				3ABB86922666C80300311389 /* LaunchScreen.storyboard */,
 				3ABB86952666C80300311389 /* Info.plist */,
+				3A12A07F2670536200B22B01 /* GoogleService-Info.plist */,
 			);
 			path = workout30;
 			sourceTree = "<group>";
@@ -164,6 +170,7 @@
 				3ABB86802666C80200311389 /* Sources */,
 				3ABB86812666C80200311389 /* Frameworks */,
 				3ABB86822666C80200311389 /* Resources */,
+				895B3DF726ADAB0C0929C05F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -211,8 +218,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A12A082267053A000B22B01 /* Podfile in Resources */,
 				3ABB86942666C80300311389 /* LaunchScreen.storyboard in Resources */,
 				3ACCA267266AFB19005DB59C /* Localizable.strings in Resources */,
+				3A12A0802670536200B22B01 /* GoogleService-Info.plist in Resources */,
 				3ABB86912666C80300311389 /* Assets.xcassets in Resources */,
 				3ACCA262266AF11B005DB59C /* swiftgen.yml in Resources */,
 			);
@@ -238,6 +247,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"${PODS_ROOT}/SwiftGen/bin/swiftgen\" ]]; then\n  \"${PODS_ROOT}/SwiftGen/bin/swiftgen\"\nelse\n  echo \"warning: SwiftGen is not installed. Run 'pod install --repo-update' to install it.\"\nfi\n";
+		};
+		895B3DF726ADAB0C0929C05F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-workout30/Pods-workout30-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-workout30/Pods-workout30-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-workout30/Pods-workout30-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		D504E76776E337865DF09BAB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
