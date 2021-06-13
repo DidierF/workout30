@@ -12,5 +12,6 @@ target 'workout30' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Storage'
   pod 'FirebaseUI/Storage'
+  pod 'Firebase/Database'
 
 end

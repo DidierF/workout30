@@ -7,10 +7,13 @@
 
 import Foundation
 
-class Exercise {
+class Exercise: CustomStringConvertible {
     var name: String = ""
     var time: Int = 0
     var image: String = ""
-    var description: String = ""
     var rest: Int = 0
+
+    public var description: String {
+        return "\(name)"
+    }
 }

@@ -11,7 +11,7 @@ import FirebaseUI
 
 class ViewController: UIViewController {
 
-    let excercises = WorkoutService().getWorkout()
+    var excercises: [Exercise] = []
     var selected = -1
 
     let strings = L10n.Workout.self
@@ -43,6 +43,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = strings.title
+        WorkoutService().getWorkout(completion: refreshWorkout)
 
         view.addSubviews([nextButton, table])
 
@@ -57,6 +58,11 @@ class ViewController: UIViewController {
             nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
+    }
+
+    private func refreshWorkout(_ newExercises: [Exercise]) {
+        self.excercises = newExercises
+        self.table.reloadData()
     }
 
     @objc private func onNextPress() {
