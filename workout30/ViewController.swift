@@ -41,7 +41,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
 
@@ -58,6 +57,10 @@ class ViewController: UIViewController {
             nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
+    }
+
+    override func viewWillLayoutSubviews() {
+      view.backgroundColor = UIColor(named: "background")
     }
 
     private func refreshWorkout(_ newExercises: [Exercise]) {
