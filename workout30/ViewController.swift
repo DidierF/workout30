@@ -23,7 +23,8 @@ class ViewController: UIViewController {
         b.heightAnchor.constraint(equalToConstant: 80).isActive = true
         b.setTitle(strings.Button.start, for: .normal)
         b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
-        b.backgroundColor = UIColor.init(displayP3Red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+        b.backgroundColor = UIColor.init(named: "button")
+        b.titleLabel?.textColor = .init(named: "buttonText")
 
         return b
     }()

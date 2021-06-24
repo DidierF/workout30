@@ -70,6 +70,7 @@ class ExerciseCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = L10n.Exercise.exercise
+        l.textColor = .init(named: "text")
         return l
     }()
 
@@ -78,6 +79,7 @@ class ExerciseCell: UITableViewCell {
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = "00:00"
         l.textAlignment = .right
+        l.textColor = .init(named: "text")
         return l
     }()
 
