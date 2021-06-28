@@ -13,6 +13,22 @@ class ViewController: UIViewController {
 
     var excercises: [Exercise] = []
     var selected = -1
+    var state: ExerciseState = .NotStarted {
+        didSet {
+            switch state {
+                case .Running:
+                    nextButton.setTitle(strings.Button.rest, for: .normal)
+                case .Resting:
+                    if (selected == excercises.count - 1) {
+                        nextButton.setTitle(strings.Button.finish, for: .normal)
+                        break
+                    }
+                    nextButton.setTitle(strings.Button.next, for: .normal)
+                default:
+                    nextButton.setTitle(strings.Button.start, for: .normal)
+            }
+        }
+    }
 
     let strings = L10n.Workout.self
     let storage = Storage.storage()
@@ -70,15 +86,14 @@ class ViewController: UIViewController {
     }
 
     @objc private func onNextPress() {
-        if selected == excercises.count - 1 {
+        if (state == .Running) {
+            state = .Resting
+        } else if (selected == excercises.count - 1) {
+            state = .NotStarted
             selected = -1
-            nextButton.setTitle(strings.Button.start, for: .normal)
-        } else if selected < excercises.count - 1 {
-            nextButton.setTitle(strings.Button.next, for: .normal)
+        } else {
+            state = .Running
             selected += 1
-            if selected == excercises.count - 1 {
-                nextButton.setTitle(strings.Button.finish, for: .normal)
-            }
         }
         table.reloadData()
     }
@@ -91,12 +106,17 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = (tableView.dequeueReusableCell(withIdentifier: ExerciseCell.identifier) ?? ExerciseCell()) as! ExerciseCell
         let row = indexPath.row
         let ex = excercises[row]
+
         cell.title = ex.name
-        cell.time = ex.time
-        let pathReference = storage.reference(withPath: ex.image)
-        cell.image.sd_setImage(with: pathReference, placeholderImage: nil)
-        if row <= selected {
-            cell.cycleState()
+        cell.time = row == selected && state == .Resting ? ex.rest : ex.time
+        let imgReference = storage.reference(withPath: ex.image)
+        cell.image.sd_setImage(with: imgReference, placeholderImage: nil)
+        if row == selected {
+            cell.state = state
+        } else if row < selected {
+            cell.state = .Ended
+        } else {
+            cell.state = .NotStarted
         }
         return cell
     }

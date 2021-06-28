@@ -26,6 +26,8 @@ internal enum L10n {
       internal static let finish = L10n.tr("Localizable", "workout.button.finish")
       /// Next
       internal static let next = L10n.tr("Localizable", "workout.button.next")
+      /// Rest
+      internal static let rest = L10n.tr("Localizable", "workout.button.rest")
       /// Start
       internal static let start = L10n.tr("Localizable", "workout.button.start")
     }

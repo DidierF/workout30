@@ -15,28 +15,20 @@ class ExerciseCell: UITableViewCell {
 
     var state: ExerciseState = .NotStarted {
         didSet {
+            timer.invalidate()
             switch state {
             case .NotStarted:
-                backgroundColor = .white
-                label.textColor = .black
+                break
             case .Running:
-                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
-                    self.time -= 1
-                })
+                setTimer()
                 timer.fire()
-                backgroundColor = .systemGreen
             case .Resting:
                 label.text = L10n.Exercise.rest
-                time = 10
-                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
-                    self.time -= 1
-                })
+                
+                setTimer()
                 timer.fire()
             case .Ended:
-                backgroundColor = .lightGray
-                label.textColor = .white
-                _time.textColor = .white
-                timer.invalidate()
+                break
             }
         }
     }
@@ -58,9 +50,6 @@ class ExerciseCell: UITableViewCell {
             _time.text = String(format:"%02d:%02d", minutes, seconds)
             if time == 0 {
                 timer.invalidate()
-                if state == .Running {
-                    state = .Resting
-                }
             }
 
         }
@@ -131,12 +120,11 @@ class ExerciseCell: UITableViewCell {
         ])
     }
 
-    func cycleState() {
-        switch state {
-        case .NotStarted:
-            state = .Running
-        default:
-            state = .Ended
-        }
+    private func setTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
+            if self?.time ?? 0 > 0 {
+                self?.time -= 1
+            }
+        })
     }
 }

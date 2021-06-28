@@ -21,13 +21,15 @@ class WorkoutService {
                     guard let rawX = value as? [String: Any],
                           let name = rawX["name"] as? String,
                           let time = rawX["time"] as? Int,
-                          let img = rawX["image"] as? String else {
+                          let img = rawX["image"] as? String,
+                          let rest = rawX["rest"] as? Int else {
                         continue
                     }
                     let x = Exercise()
                     x.name = name
                     x.time = time
                     x.image = img
+                    x.rest = rest
                     result.append(x)
                 }
             }
