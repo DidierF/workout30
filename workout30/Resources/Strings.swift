@@ -16,6 +16,10 @@ internal enum L10n {
     internal static let exercise = L10n.tr("Localizable", "exercise.exercise")
     /// Rest
     internal static let rest = L10n.tr("Localizable", "exercise.rest")
+    /// %02d:%02d
+    internal static func timer(_ p1: Int, _ p2: Int) -> String {
+      return L10n.tr("Localizable", "exercise.timer", p1, p2)
+    }
   }
 
   internal enum Workout {

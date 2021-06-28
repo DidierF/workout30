@@ -47,7 +47,7 @@ class ExerciseCell: UITableViewCell {
             let seconds = time % 60
             let minutes = time / 60
 
-            _time.text = String(format:"%02d:%02d", minutes, seconds)
+            _time.text = String(format:L10n.Exercise.timer(minutes, seconds), minutes, seconds)
             if time == 0 {
                 timer.invalidate()
             }
@@ -66,7 +66,6 @@ class ExerciseCell: UITableViewCell {
     private lazy var _time: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "00:00"
         l.textAlignment = .right
         l.textColor = Asset.text.color
         return l
