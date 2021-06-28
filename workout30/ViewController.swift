@@ -39,8 +39,8 @@ class ViewController: UIViewController {
         b.heightAnchor.constraint(equalToConstant: 80).isActive = true
         b.setTitle(strings.Button.start, for: .normal)
         b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
-        b.backgroundColor = UIColor.init(named: "button")
-        b.titleLabel?.textColor = .init(named: "buttonText")
+        b.backgroundColor = Asset.button.color
+        b.titleLabel?.textColor = Asset.buttonText.color
 
         return b
     }()
@@ -77,7 +77,7 @@ class ViewController: UIViewController {
     }
 
     override func viewWillLayoutSubviews() {
-      view.backgroundColor = UIColor(named: "background")
+        view.backgroundColor = Asset.background.color
     }
 
     private func refreshWorkout(_ newExercises: [Exercise]) {
