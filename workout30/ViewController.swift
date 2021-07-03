@@ -33,6 +33,12 @@ class ViewController: UIViewController {
     let strings = L10n.Workout.self
     let storage = Storage.storage()
 
+    var auto = false {
+        didSet {
+            navigationItem.rightBarButtonItem?.tintColor = auto ? Asset.toggleOn.color : Asset.toggleOff.color
+        }
+    }
+
     lazy var nextButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -56,12 +62,22 @@ class ViewController: UIViewController {
         return t
     }()
 
+    @objc private func toggleAuto() {
+        print(state)
+        if state == .NotStarted {
+            auto = !auto
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
 
         view.addSubviews([nextButton, table])
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: strings.Button.auto, style: .plain, target: self, action: #selector(toggleAuto))
+        auto = false
 
         NSLayoutConstraint.activate([
             table.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -91,11 +107,19 @@ class ViewController: UIViewController {
         } else if (selected == excercises.count - 1) {
             state = .NotStarted
             selected = -1
+            nextButton.isHidden = false
         } else {
+            nextButton.isHidden = auto
             state = .Running
             selected += 1
         }
         table.reloadData()
+    }
+
+    @objc private func onTimerEnd() {
+        if auto {
+            onNextPress()
+        }
     }
 
 }
@@ -113,6 +137,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.image.sd_setImage(with: imgReference, placeholderImage: nil)
         if row == selected {
             cell.state = state
+            cell.onTimerEnd = onTimerEnd
         } else if row < selected {
             cell.state = .Ended
         } else {

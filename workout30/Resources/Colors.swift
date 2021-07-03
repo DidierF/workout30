@@ -24,6 +24,8 @@ internal enum Asset {
   internal static let buttonText = ColorAsset(name: "buttonText")
   internal static let divider = ColorAsset(name: "divider")
   internal static let text = ColorAsset(name: "text")
+  internal static let toggleOff = ColorAsset(name: "toggleOff")
+  internal static let toggleOn = ColorAsset(name: "toggleOn")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 

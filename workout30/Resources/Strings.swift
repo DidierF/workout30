@@ -26,6 +26,8 @@ internal enum L10n {
     /// Workout
     internal static let title = L10n.tr("Localizable", "workout.title")
     internal enum Button {
+      /// Auto
+      internal static let auto = L10n.tr("Localizable", "workout.button.auto")
       /// Finish
       internal static let finish = L10n.tr("Localizable", "workout.button.finish")
       /// Next

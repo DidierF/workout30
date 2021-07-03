@@ -51,6 +51,7 @@ class ExerciseCell: UITableViewCell {
             _time.text = String(format:L10n.Exercise.timer(minutes, seconds), minutes, seconds)
             if time == 0 {
                 timer.invalidate()
+                onTimerEnd?()
             }
 
         }
@@ -89,6 +90,8 @@ class ExerciseCell: UITableViewCell {
     private lazy var imageHeight: NSLayoutConstraint = {
         image.heightAnchor.constraint(equalToConstant: 0)
     }()
+
+    public var onTimerEnd: (() -> Void)?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
