@@ -13,6 +13,7 @@ class ViewController: UIViewController {
 
     var excercises: [Exercise] = []
     var selected = -1
+    var currentSet = 1
     var state: ExerciseState = .NotStarted {
         didSet {
             switch state {
@@ -38,6 +39,7 @@ class ViewController: UIViewController {
             navigationItem.rightBarButtonItem?.tintColor = auto ? Asset.toggleOn.color : Asset.toggleOff.color
         }
     }
+    var sets = 2
 
     lazy var nextButton: UIButton = {
         let b = UIButton()
@@ -102,12 +104,26 @@ class ViewController: UIViewController {
     }
 
     @objc private func onNextPress() {
+        if !auto {
+            cycleExercise()
+            return
+        }
+    }
+
+    private func cycleExercise() {
         if (state == .Running) {
             state = .Resting
         } else if (selected == excercises.count - 1) {
-            state = .NotStarted
-            selected = -1
-            nextButton.isHidden = false
+            if currentSet == sets {
+                nextButton.isHidden = false
+                state = .NotStarted
+                selected = -1
+                currentSet = 1
+            } else {
+                currentSet += 1
+                selected = 0
+                state = .Running
+            }
         } else {
             nextButton.isHidden = auto
             state = .Running
@@ -118,7 +134,7 @@ class ViewController: UIViewController {
 
     @objc private func onTimerEnd() {
         if auto {
-            onNextPress()
+            cycleExercise()
         }
     }
 
