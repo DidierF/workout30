@@ -11,7 +11,7 @@ import FirebaseUI
 
 class ViewController: UIViewController {
 
-    var excercises: [Exercise] = []
+    var exercises: [Exercise] = []
     var selected = -1
     var currentSet = 1
     var state: ExerciseState = .NotStarted {
@@ -70,14 +70,30 @@ class ViewController: UIViewController {
         return b
     }()
 
+    lazy var exerciseTitle: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.boldSystemFont(ofSize: 34)
+        l.numberOfLines = 1
+        l.adjustsFontSizeToFitWidth = true
+        l.lineBreakMode = .byTruncatingTail
+        l.textAlignment = .center
+
+        return l
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
         auto = false
 
-        view.addSubviews([currentExercise, playButton])
+        view.addSubviews([exerciseTitle, currentExercise, playButton])
         NSLayoutConstraint.activate([
+            exerciseTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
+            exerciseTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            exerciseTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+
             currentExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             currentExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
@@ -92,12 +108,14 @@ class ViewController: UIViewController {
     }
 
     private func refreshWorkout(_ newExercises: [Exercise]) {
-        self.excercises = newExercises
+        self.exercises = newExercises
         refreshViews()
     }
 
     private func refreshViews() {
-        currentExercise.image.sd_setImage(with: storage.reference(withPath: excercises[0].image), placeholderImage: nil)
+        let main = exercises[0]
+        currentExercise.image.sd_setImage(with: storage.reference(withPath: main.image), placeholderImage: nil)
+        exerciseTitle.text = main.name
     }
 
     @objc private func onNextPress() {
@@ -110,7 +128,7 @@ class ViewController: UIViewController {
     private func cycleExercise() {
         if (state == .Running) {
             state = .Resting
-        } else if (selected == excercises.count - 1) {
+        } else if (selected == exercises.count - 1) {
             if currentSet == sets {
                 state = .NotStarted
                 selected = -1
