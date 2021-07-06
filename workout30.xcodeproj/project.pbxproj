@@ -10,15 +10,15 @@
 		3A12A0802670536200B22B01 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A12A07F2670536200B22B01 /* GoogleService-Info.plist */; };
 		3A12A082267053A000B22B01 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 3A12A081267053A000B22B01 /* Podfile */; };
 		3A1F8BC82679849D0046B9D5 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A1F8BC72679849D0046B9D5 /* Colors.xcassets */; };
-		3A730232268A8B00005EF15E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A730231268A8B00005EF15E /* Colors.swift */; };
 		3A7B00B82666CF53000C9F7F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00B72666CF53000C9F7F /* UIView+Extension.swift */; };
 		3A7B00BA2666EB4B000C9F7F /* ExerciseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00B92666EB4B000C9F7F /* ExerciseCell.swift */; };
 		3A7B00BD2667D5A9000C9F7F /* ExerciseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00BC2667D5A9000C9F7F /* ExerciseState.swift */; };
 		3AB96F7D2695035F005B6BCF /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB96F7C2695035F005B6BCF /* ExerciseView.swift */; };
+		3AB96F8126951310005B6BCF /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB96F8026951310005B6BCF /* Assets.swift */; };
 		3ABB86882666C80200311389 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABB86872666C80200311389 /* AppDelegate.swift */; };
 		3ABB868A2666C80200311389 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABB86892666C80200311389 /* SceneDelegate.swift */; };
 		3ABB868C2666C80200311389 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABB868B2666C80200311389 /* ViewController.swift */; };
-		3ABB86912666C80300311389 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3ABB86902666C80300311389 /* Assets.xcassets */; };
+		3ABB86912666C80300311389 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3ABB86902666C80300311389 /* Images.xcassets */; };
 		3ABB86942666C80300311389 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ABB86922666C80300311389 /* LaunchScreen.storyboard */; };
 		3ACCA262266AF11B005DB59C /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 3ACCA261266AF11B005DB59C /* swiftgen.yml */; };
 		3ACCA264266AFA04005DB59C /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACCA263266AFA04005DB59C /* Strings.swift */; };
@@ -32,16 +32,16 @@
 		3A12A07F2670536200B22B01 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3A12A081267053A000B22B01 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		3A1F8BC72679849D0046B9D5 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		3A730231268A8B00005EF15E /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		3A7B00B72666CF53000C9F7F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		3A7B00B92666EB4B000C9F7F /* ExerciseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCell.swift; sourceTree = "<group>"; };
 		3A7B00BC2667D5A9000C9F7F /* ExerciseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseState.swift; sourceTree = "<group>"; };
 		3AB96F7C2695035F005B6BCF /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
+		3AB96F8026951310005B6BCF /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		3ABB86842666C80200311389 /* workout30.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = workout30.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ABB86872666C80200311389 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3ABB86892666C80200311389 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3ABB868B2666C80200311389 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3ABB86902666C80300311389 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3ABB86902666C80300311389 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3ABB86932666C80300311389 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3ABB86952666C80300311389 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3ACCA261266AF11B005DB59C /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
@@ -133,10 +133,10 @@
 		3ACCA268266AFBEF005DB59C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				3A730231268A8B00005EF15E /* Colors.swift */,
+				3AB96F8026951310005B6BCF /* Assets.swift */,
 				3ACCA265266AFB19005DB59C /* Localizable.strings */,
 				3ACCA263266AFA04005DB59C /* Strings.swift */,
-				3ABB86902666C80300311389 /* Assets.xcassets */,
+				3ABB86902666C80300311389 /* Images.xcassets */,
 				3A1F8BC72679849D0046B9D5 /* Colors.xcassets */,
 			);
 			path = Resources;
@@ -231,7 +231,7 @@
 				3ABB86942666C80300311389 /* LaunchScreen.storyboard in Resources */,
 				3ACCA267266AFB19005DB59C /* Localizable.strings in Resources */,
 				3A12A0802670536200B22B01 /* GoogleService-Info.plist in Resources */,
-				3ABB86912666C80300311389 /* Assets.xcassets in Resources */,
+				3ABB86912666C80300311389 /* Images.xcassets in Resources */,
 				3ACCA262266AF11B005DB59C /* swiftgen.yml in Resources */,
 				3A1F8BC82679849D0046B9D5 /* Colors.xcassets in Resources */,
 			);
@@ -305,7 +305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3ABB868C2666C80200311389 /* ViewController.swift in Sources */,
-				3A730232268A8B00005EF15E /* Colors.swift in Sources */,
+				3AB96F8126951310005B6BCF /* Assets.swift in Sources */,
 				3AD5719D266C0BD200FAA9DA /* WorkoutService.swift in Sources */,
 				3AD5719A266C095B00FAA9DA /* Exercise.swift in Sources */,
 				3A7B00BD2667D5A9000C9F7F /* ExerciseState.swift in Sources */,
