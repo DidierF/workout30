@@ -26,10 +26,8 @@ class ExerciseView: UIView {
     init(radius: CGFloat) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
+        addShadow()
 
-        layer.shadowColor = CGColor(gray: 0, alpha: 1)
-        layer.shadowOpacity = 0.5
-        layer.shadowOffset = CGSize(width: 0, height: 4)
         layer.cornerRadius = radius
         clipsToBounds = false
 
