@@ -18,15 +18,11 @@ class ViewController: UIViewController {
         didSet {
             switch state {
                 case .Running:
-                    nextButton.setTitle(strings.Button.rest, for: .normal)
+                    break
                 case .Resting:
-                    if (selected == excercises.count - 1) {
-                        nextButton.setTitle(strings.Button.finish, for: .normal)
-                        break
-                    }
-                    nextButton.setTitle(strings.Button.next, for: .normal)
+                    break
                 default:
-                    nextButton.setTitle(strings.Button.start, for: .normal)
+                    break
             }
         }
     }
@@ -36,33 +32,9 @@ class ViewController: UIViewController {
 
     var auto = false {
         didSet {
-            navigationItem.rightBarButtonItem?.tintColor = auto ? Asset.toggleOn.color : Asset.toggleOff.color
         }
     }
     var sets = 2
-
-    lazy var nextButton: UIButton = {
-        let b = UIButton()
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        b.setTitle(strings.Button.start, for: .normal)
-        b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
-        b.backgroundColor = Asset.button.color
-        b.titleLabel?.textColor = Asset.buttonText.color
-
-        return b
-    }()
-
-    lazy var table: UITableView = {
-        let t = UITableView()
-        t.translatesAutoresizingMaskIntoConstraints = false
-        t.delegate = self
-        t.dataSource = self
-        t.backgroundColor = .clear
-        t.separatorColor = .clear
-        t.register(ExerciseCell.self, forCellReuseIdentifier: ExerciseCell.identifier)
-        return t
-    }()
 
     @objc private func toggleAuto() {
         print(state)
@@ -71,36 +43,61 @@ class ViewController: UIViewController {
         }
     }
 
+    lazy var currentExercise: ExerciseView = {
+        let size: CGFloat = 272
+        let e = ExerciseView(radius: size/2)
+        NSLayoutConstraint.activate([
+            e.heightAnchor.constraint(equalToConstant: size),
+            e.widthAnchor.constraint(equalToConstant: size)
+        ])
+        e.backgroundColor = .white
+
+        return e
+    }()
+
+    lazy var playButton: UIButton = {
+        let b = UIButton()
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setImage(Asset.Images.play.image, for: .normal)
+        NSLayoutConstraint.activate([
+            b.heightAnchor.constraint(equalToConstant: 100),
+            b.widthAnchor.constraint(equalToConstant: 100)
+        ])
+        b.layer.cornerRadius = 50
+        b.addShadow()
+
+        b.backgroundColor = .white
+        return b
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
-
-        view.addSubviews([nextButton, table])
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: strings.Button.auto, style: .plain, target: self, action: #selector(toggleAuto))
         auto = false
 
+        view.addSubviews([currentExercise, playButton])
         NSLayoutConstraint.activate([
-            table.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            table.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            table.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            currentExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            currentExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
-            nextButton.topAnchor.constraint(equalTo: table.bottomAnchor),
-            nextButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            nextButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32)
         ])
         
     }
 
     override func viewWillLayoutSubviews() {
-        view.backgroundColor = Asset.background.color
+        view.backgroundColor = Asset.Colors.background.color
     }
 
     private func refreshWorkout(_ newExercises: [Exercise]) {
         self.excercises = newExercises
-        self.table.reloadData()
+        refreshViews()
+    }
+
+    private func refreshViews() {
+        currentExercise.image.sd_setImage(with: storage.reference(withPath: excercises[0].image), placeholderImage: nil)
     }
 
     @objc private func onNextPress() {
@@ -115,7 +112,6 @@ class ViewController: UIViewController {
             state = .Resting
         } else if (selected == excercises.count - 1) {
             if currentSet == sets {
-                nextButton.isHidden = false
                 state = .NotStarted
                 selected = -1
                 currentSet = 1
@@ -125,11 +121,9 @@ class ViewController: UIViewController {
                 state = .Running
             }
         } else {
-            nextButton.isHidden = auto
             state = .Running
             selected += 1
         }
-        table.reloadData()
     }
 
     @objc private func onTimerEnd() {
@@ -139,35 +133,3 @@ class ViewController: UIViewController {
     }
 
 }
-
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = (tableView.dequeueReusableCell(withIdentifier: ExerciseCell.identifier) ?? ExerciseCell()) as! ExerciseCell
-        let row = indexPath.row
-        let ex = excercises[row]
-
-        cell.title = ex.name
-        cell.time = row == selected && state == .Resting ? ex.rest : ex.time
-        let imgReference = storage.reference(withPath: ex.image)
-        cell.image.sd_setImage(with: imgReference, placeholderImage: nil)
-        if row == selected {
-            cell.state = state
-            cell.onTimerEnd = onTimerEnd
-        } else if row < selected {
-            cell.state = .Ended
-        } else {
-            cell.state = .NotStarted
-        }
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        excercises.count
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        UITableView.automaticDimension
-    }
-}
-
