@@ -82,13 +82,22 @@ class ViewController: UIViewController {
         return l
     }()
 
+    lazy var timer: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.systemFont(ofSize: 20)
+        l.numberOfLines = 1
+        l.textAlignment = .center
+        return l
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
         auto = false
 
-        view.addSubviews([exerciseTitle, currentExercise, playButton])
+        view.addSubviews([exerciseTitle, currentExercise, playButton, timer])
         NSLayoutConstraint.activate([
             exerciseTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
             exerciseTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
@@ -96,6 +105,9 @@ class ViewController: UIViewController {
 
             currentExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             currentExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
+            timer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            timer.topAnchor.constraint(equalTo: currentExercise.bottomAnchor, constant: 24),
 
             playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32)
@@ -116,6 +128,7 @@ class ViewController: UIViewController {
         let main = exercises[0]
         currentExercise.image.sd_setImage(with: storage.reference(withPath: main.image), placeholderImage: nil)
         exerciseTitle.text = main.name
+        timer.text = L10n.Exercise.timer(main.time/60, main.time%60)
     }
 
     @objc private func onNextPress() {
