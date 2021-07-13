@@ -14,14 +14,27 @@ class ViewController: UIViewController {
     var exercises: [Exercise] = []
     var selected = -1
     var currentSet = 1
+
+    var auto = true
+    var sets = 1
+
     var state: ExerciseState = .NotStarted {
         didSet {
             switch state {
                 case .Running:
+                    selected += 1
+                    resetTimer(with: exercises[selected].time)
+                    playButton.icon = auto ? pause : rest
                     break
                 case .Resting:
+                    resetTimer(with: exercises[selected].rest)
+                    playButton.icon = play
                     break
                 default:
+                    selected = -1
+                    currentSet = 1
+                    time = 0
+                    timer?.invalidate()
                     break
             }
         }
@@ -32,9 +45,6 @@ class ViewController: UIViewController {
     let play = Asset.Images.play.image
     let pause = Asset.Images.pause.image
     let rest = Asset.Images.rest.image
-
-    var auto = true
-    var sets = 1
 
     var timer: Timer?
     private var time: Int = 0 {
@@ -97,6 +107,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
+        view.backgroundColor = Asset.Colors.background.color
 
         view.addSubviews([exerciseTitle, currentExercise, playButton, timerLabel])
         NSLayoutConstraint.activate([
@@ -113,10 +124,6 @@ class ViewController: UIViewController {
             playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32)
         ])
-    }
-
-    override func viewWillLayoutSubviews() {
-        view.backgroundColor = Asset.Colors.background.color
     }
 
     private func refreshWorkout(_ newExercises: [Exercise]) {
@@ -142,13 +149,9 @@ class ViewController: UIViewController {
     private func cycleExercise() {
         if (state == .Running) {
             state = .Resting
-            resetTimer(with: exercises[selected].rest)
-            playButton.icon = play
         } else if (selected == exercises.count - 1) {
             if currentSet == sets {
                 state = .NotStarted
-                selected = -1
-                currentSet = 1
             } else {
                 currentSet += 1
                 selected = 0
@@ -156,9 +159,6 @@ class ViewController: UIViewController {
             }
         } else {
             state = .Running
-            selected += 1
-            resetTimer(with: exercises[selected].time)
-            playButton.icon = auto ? pause : rest
         }
     }
 
