@@ -29,6 +29,8 @@ class ViewController: UIViewController {
 
     let strings = L10n.Workout.self
     let storage = Storage.storage()
+    let play = Asset.Images.play.image
+    let pause = Asset.Images.pause.image
 
     var auto = true
     var sets = 2
@@ -65,7 +67,7 @@ class ViewController: UIViewController {
     lazy var playButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setImage(Asset.Images.play.image, for: .normal)
+        b.setImage(play, for: .normal)
         NSLayoutConstraint.activate([
             b.heightAnchor.constraint(equalToConstant: 100),
             b.widthAnchor.constraint(equalToConstant: 100)
@@ -102,7 +104,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
-//        auto = false
 
         view.addSubviews([exerciseTitle, currentExercise, playButton, timerLabel])
         NSLayoutConstraint.activate([
@@ -119,7 +120,6 @@ class ViewController: UIViewController {
             playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32)
         ])
-        
     }
 
     override func viewWillLayoutSubviews() {
@@ -164,6 +164,9 @@ class ViewController: UIViewController {
             state = .Running
             selected += 1
             resetTimer(with: exercises[selected].time)
+            if auto {
+                playButton.setImage(pause, for: .normal)
+            }
         }
     }
 
@@ -187,8 +190,10 @@ class ViewController: UIViewController {
     private func pauseTimer() {
         if timer?.isValid ?? false {
             timer?.invalidate()
+            playButton.setImage(play, for: .normal)
         } else {
             resetTimer()
+            playButton.setImage(pause, for: .normal)
         }
     }
 
