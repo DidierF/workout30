@@ -30,14 +30,21 @@ class ViewController: UIViewController {
     let strings = L10n.Workout.self
     let storage = Storage.storage()
 
-    var auto = false {
-        didSet {
-        }
-    }
+    var auto = true
     var sets = 2
 
+    var timer: Timer?
+    private var time: Int = 0 {
+        didSet {
+            if time == 0 {
+                timer?.invalidate()
+                onTimerEnd()
+            }
+            refreshViews()
+        }
+    }
+
     @objc private func toggleAuto() {
-        print(state)
         if state == .NotStarted {
             auto = !auto
         }
@@ -65,12 +72,12 @@ class ViewController: UIViewController {
         ])
         b.layer.cornerRadius = 50
         b.addShadow()
-
+        b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
         b.backgroundColor = .white
         return b
     }()
 
-    lazy var exerciseTitle: UILabel = {
+    let exerciseTitle: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.boldSystemFont(ofSize: 34)
@@ -82,7 +89,7 @@ class ViewController: UIViewController {
         return l
     }()
 
-    lazy var timer: UILabel = {
+    let timerLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 20)
@@ -95,9 +102,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
-        auto = false
+//        auto = false
 
-        view.addSubviews([exerciseTitle, currentExercise, playButton, timer])
+        view.addSubviews([exerciseTitle, currentExercise, playButton, timerLabel])
         NSLayoutConstraint.activate([
             exerciseTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
             exerciseTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
@@ -106,8 +113,8 @@ class ViewController: UIViewController {
             currentExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             currentExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
-            timer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            timer.topAnchor.constraint(equalTo: currentExercise.bottomAnchor, constant: 24),
+            timerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            timerLabel.topAnchor.constraint(equalTo: currentExercise.bottomAnchor, constant: 24),
 
             playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32)
@@ -125,22 +132,24 @@ class ViewController: UIViewController {
     }
 
     private func refreshViews() {
-        let main = exercises[0]
+        let main = selected == -1 ? exercises[0] : exercises[selected]
         currentExercise.image.sd_setImage(with: storage.reference(withPath: main.image), placeholderImage: nil)
         exerciseTitle.text = main.name
-        timer.text = L10n.Exercise.timer(main.time/60, main.time%60)
+        timerLabel.text = L10n.Exercise.timer(time/60, time%60)
     }
 
     @objc private func onNextPress() {
-        if !auto {
+        if !auto || state == .NotStarted {
             cycleExercise()
             return
         }
+        pauseTimer()
     }
 
     private func cycleExercise() {
         if (state == .Running) {
             state = .Resting
+            resetTimer(with: exercises[selected].rest)
         } else if (selected == exercises.count - 1) {
             if currentSet == sets {
                 state = .NotStarted
@@ -154,12 +163,32 @@ class ViewController: UIViewController {
         } else {
             state = .Running
             selected += 1
+            resetTimer(with: exercises[selected].time)
         }
     }
 
-    @objc private func onTimerEnd() {
+    private func resetTimer(with time: Int? = nil) {
+        if time != nil {
+            self.time = time! + 1
+        }
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] timer in
+            self?.time -= 1
+        })
+        timer?.fire()
+    }
+
+    private func onTimerEnd() {
         if auto {
             cycleExercise()
+        }
+    }
+
+    private func pauseTimer() {
+        if timer?.isValid ?? false {
+            timer?.invalidate()
+        } else {
+            resetTimer()
         }
     }
 
