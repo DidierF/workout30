@@ -33,7 +33,7 @@ class ViewController: UIViewController {
     let pause = Asset.Images.pause.image
     let rest = Asset.Images.rest.image
 
-    var auto = false
+    var auto = true
     var sets = 1
 
     var timer: Timer?
@@ -65,18 +65,10 @@ class ViewController: UIViewController {
         return e
     }()
 
-    lazy var playButton: UIButton = {
-        let b = UIButton()
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.setImage(play, for: .normal)
-        NSLayoutConstraint.activate([
-            b.heightAnchor.constraint(equalToConstant: 100),
-            b.widthAnchor.constraint(equalToConstant: 100)
-        ])
-        b.layer.cornerRadius = 50
-        b.addShadow()
+    lazy var playButton: ActionButton = {
+        let b = ActionButton(size: 100)
+        b.icon = play
         b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
-        b.backgroundColor = .white
         return b
     }()
 
@@ -151,7 +143,7 @@ class ViewController: UIViewController {
         if (state == .Running) {
             state = .Resting
             resetTimer(with: exercises[selected].rest)
-            playButton.setImage(play, for: .normal)
+            playButton.icon = play
         } else if (selected == exercises.count - 1) {
             if currentSet == sets {
                 state = .NotStarted
@@ -166,7 +158,7 @@ class ViewController: UIViewController {
             state = .Running
             selected += 1
             resetTimer(with: exercises[selected].time)
-            playButton.setImage(auto ? pause : rest, for: .normal)
+            playButton.icon = auto ? pause : rest
         }
     }
 
@@ -190,10 +182,10 @@ class ViewController: UIViewController {
     private func pauseTimer() {
         if timer?.isValid ?? false {
             timer?.invalidate()
-            playButton.setImage(play, for: .normal)
+            playButton.icon = play
         } else {
             resetTimer()
-            playButton.setImage(pause, for: .normal)
+            playButton.icon = pause
         }
     }
 

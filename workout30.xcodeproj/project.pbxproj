@@ -13,6 +13,7 @@
 		3A7B00B82666CF53000C9F7F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00B72666CF53000C9F7F /* UIView+Extension.swift */; };
 		3A7B00BA2666EB4B000C9F7F /* ExerciseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00B92666EB4B000C9F7F /* ExerciseCell.swift */; };
 		3A7B00BD2667D5A9000C9F7F /* ExerciseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B00BC2667D5A9000C9F7F /* ExerciseState.swift */; };
+		3AAC97D8269D2C3B00B4776F /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAC97D7269D2C3B00B4776F /* ActionButton.swift */; };
 		3AB96F7D2695035F005B6BCF /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB96F7C2695035F005B6BCF /* ExerciseView.swift */; };
 		3AB96F8126951310005B6BCF /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB96F8026951310005B6BCF /* Assets.swift */; };
 		3ABB86882666C80200311389 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABB86872666C80200311389 /* AppDelegate.swift */; };
@@ -35,6 +36,7 @@
 		3A7B00B72666CF53000C9F7F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		3A7B00B92666EB4B000C9F7F /* ExerciseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCell.swift; sourceTree = "<group>"; };
 		3A7B00BC2667D5A9000C9F7F /* ExerciseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseState.swift; sourceTree = "<group>"; };
+		3AAC97D7269D2C3B00B4776F /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		3AB96F7C2695035F005B6BCF /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		3AB96F8026951310005B6BCF /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		3ABB86842666C80200311389 /* workout30.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = workout30.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +74,7 @@
 				3A7B00B62666CF3A000C9F7F /* Extensions */,
 				3A7B00B92666EB4B000C9F7F /* ExerciseCell.swift */,
 				3AB96F7C2695035F005B6BCF /* ExerciseView.swift */,
+				3AAC97D7269D2C3B00B4776F /* ActionButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				3A7B00BD2667D5A9000C9F7F /* ExerciseState.swift in Sources */,
 				3ABB86882666C80200311389 /* AppDelegate.swift in Sources */,
 				3A7B00B82666CF53000C9F7F /* UIView+Extension.swift in Sources */,
+				3AAC97D8269D2C3B00B4776F /* ActionButton.swift in Sources */,
 				3AB96F7D2695035F005B6BCF /* ExerciseView.swift in Sources */,
 				3A7B00BA2666EB4B000C9F7F /* ExerciseCell.swift in Sources */,
 				3ABB868A2666C80200311389 /* SceneDelegate.swift in Sources */,
