@@ -28,13 +28,16 @@ class ViewController: UIViewController {
                     break
                 case .Resting:
                     resetTimer(with: exercises[selected].rest)
-                    playButton.icon = play
+                    if !auto {
+                        playButton.icon = play
+                    }
                     break
                 default:
                     selected = -1
                     currentSet = 1
                     time = 0
                     timer?.invalidate()
+                    playButton.icon = play
                     break
             }
         }
@@ -49,11 +52,11 @@ class ViewController: UIViewController {
     var timer: Timer?
     private var time: Int = 0 {
         didSet {
-            if time == 0 {
+            refreshViews()
+            if time < 0 {
                 timer?.invalidate()
                 onTimerEnd()
             }
-            refreshViews()
         }
     }
 
