@@ -23,10 +23,14 @@ class ExerciseView: UIView {
         return v
     }()
 
+    var rad: CGFloat = 0
+
     init(radius: CGFloat) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         addShadow()
+
+        rad = radius
 
         layer.cornerRadius = radius
         clipsToBounds = false
@@ -52,4 +56,26 @@ class ExerciseView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public func animateBorder() {
+        let circle = CAShapeLayer()
+
+        let circularPath = UIBezierPath(arcCenter: CGPoint(x: rad, y: rad), radius: rad, startAngle: .pi / -2, endAngle: .pi * 2, clockwise: true)
+        circle.path = circularPath.cgPath
+        circle.strokeColor = UIColor.blue.cgColor
+        circle.lineWidth = 8
+        circle.fillColor = UIColor.clear.cgColor
+        circle.strokeEnd = 0
+        circle.lineCap = .round
+
+
+        layer.addSublayer(circle)
+
+        let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        basicAnimation.toValue = 1
+        basicAnimation.duration = 10
+        basicAnimation.fillMode = .forwards
+        basicAnimation.isRemovedOnCompletion = false
+
+        circle.add(basicAnimation, forKey: "animkey")
+    }
 }
