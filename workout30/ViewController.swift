@@ -31,9 +31,10 @@ class ViewController: UIViewController {
     let storage = Storage.storage()
     let play = Asset.Images.play.image
     let pause = Asset.Images.pause.image
+    let rest = Asset.Images.rest.image
 
-    var auto = true
-    var sets = 2
+    var auto = false
+    var sets = 1
 
     var timer: Timer?
     private var time: Int = 0 {
@@ -150,6 +151,7 @@ class ViewController: UIViewController {
         if (state == .Running) {
             state = .Resting
             resetTimer(with: exercises[selected].rest)
+            playButton.setImage(play, for: .normal)
         } else if (selected == exercises.count - 1) {
             if currentSet == sets {
                 state = .NotStarted
@@ -164,9 +166,7 @@ class ViewController: UIViewController {
             state = .Running
             selected += 1
             resetTimer(with: exercises[selected].time)
-            if auto {
-                playButton.setImage(pause, for: .normal)
-            }
+            playButton.setImage(auto ? pause : rest, for: .normal)
         }
     }
 
