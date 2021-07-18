@@ -26,6 +26,7 @@
    inputs:
      - workout30/Resources/Colors.xcassets
      - workout30/Resources/Images.xcassets
+     - workout30/Resources/Sounds.xcassets
    outputs:
      - templateName: swift5
        output: workout30/Resources/Assets.swift

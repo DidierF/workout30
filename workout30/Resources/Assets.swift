@@ -36,6 +36,10 @@ internal enum Asset {
     internal static let play = ImageAsset(name: "Play")
     internal static let rest = ImageAsset(name: "Rest")
   }
+  internal enum Sounds {
+    internal static let end = DataAsset(name: "End")
+    internal static let start = DataAsset(name: "Start")
+  }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
@@ -76,6 +80,34 @@ internal extension ColorAsset.Color {
     #endif
   }
 }
+
+internal struct DataAsset {
+  internal fileprivate(set) var name: String
+
+  #if os(iOS) || os(tvOS) || os(macOS)
+  @available(iOS 9.0, macOS 10.11, *)
+  internal var data: NSDataAsset {
+    guard let data = NSDataAsset(asset: self) else {
+      fatalError("Unable to load data asset named \(name).")
+    }
+    return data
+  }
+  #endif
+}
+
+#if os(iOS) || os(tvOS) || os(macOS)
+@available(iOS 9.0, macOS 10.11, *)
+internal extension NSDataAsset {
+  convenience init?(asset: DataAsset) {
+    let bundle = BundleToken.bundle
+    #if os(iOS) || os(tvOS)
+    self.init(name: asset.name, bundle: bundle)
+    #elseif os(macOS)
+    self.init(name: NSDataAsset.Name(asset.name), bundle: bundle)
+    #endif
+  }
+}
+#endif
 
 internal struct ImageAsset {
   internal fileprivate(set) var name: String

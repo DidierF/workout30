@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseStorage
 import FirebaseUI
+import AVFoundation
 
 class ViewController: UIViewController {
 
@@ -18,15 +19,20 @@ class ViewController: UIViewController {
     var auto = true
     var sets = 1
 
+    var startSound = Asset.Sounds.start.data
+    var restSound = Asset.Sounds.end.data
+
     var state: ExerciseState = .NotStarted {
         didSet {
             switch state {
                 case .Running:
+                    playSound(startSound.data)
                     selected += 1
                     resetTimer(with: exercises[selected].time)
                     currentExercise.workoutPercentage = CGFloat(selected) * CGFloat(currentSet) / CGFloat(exercises.count) * CGFloat(sets)
                     playButton.icon = auto ? pause : rest
                 case .Resting:
+                    playSound(restSound.data)
                     resetTimer(with: exercises[selected].rest)
                     if !auto {
                         playButton.icon = play
@@ -202,6 +208,26 @@ class ViewController: UIViewController {
         } else {
             resetTimer()
             playButton.icon = pause
+        }
+    }
+
+    var player: AVAudioPlayer?
+
+    private func playSound(_ soundData: Data) {
+        do {
+            /// this codes for making this app ready to takeover the device audio
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+
+            /// change fileTypeHint according to the type of your audio file (you can omit this)
+
+//            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
+            player = try AVAudioPlayer(data: soundData, fileTypeHint: "wav")
+
+            // no need for prepareToPlay because prepareToPlay is happen automatically when calling play()
+            player!.play()
+        } catch let error as NSError {
+            print("error: \(error.localizedDescription)")
         }
     }
 
