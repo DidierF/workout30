@@ -23,9 +23,35 @@ class ExerciseView: UIView {
         return v
     }()
 
-    lazy var exerciseRing: TimerRing = {
+    lazy private var exerciseRing: TimerRing = {
         return TimerRing(center: CGPoint(x: rad, y: rad), radius: rad)
     }()
+
+    var exercisePercentage: CGFloat {
+        set {
+            exerciseRing.strokeEnd = newValue
+        }
+
+        get {
+            exerciseRing.strokeEnd
+        }
+    }
+
+    lazy private var workoutRing: TimerRing = {
+        let ring = TimerRing(center: CGPoint(x: rad, y: rad), radius: rad + 16)
+        ring.strokeColor = UIColor.green.cgColor
+        return ring
+    }()
+
+    var workoutPercentage: CGFloat {
+        set {
+            workoutRing.strokeEnd = newValue
+        }
+
+        get {
+            workoutRing.strokeEnd
+        }
+    }
 
     var rad: CGFloat = 0
 
@@ -37,6 +63,7 @@ class ExerciseView: UIView {
         rad = radius
 
         layer.addSublayer(exerciseRing)
+        layer.addSublayer(workoutRing)
 
         layer.cornerRadius = radius
         clipsToBounds = false
@@ -60,12 +87,5 @@ class ExerciseView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func updateBorderTo(_ percentage: CGFloat) {
-        UIView.animate(withDuration: 1, animations: {
-            self.exerciseRing.strokeEnd = percentage
-            self.layoutIfNeeded()
-        })
     }
 }

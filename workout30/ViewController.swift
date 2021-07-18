@@ -24,6 +24,7 @@ class ViewController: UIViewController {
                 case .Running:
                     selected += 1
                     resetTimer(with: exercises[selected].time)
+                    currentExercise.workoutPercentage = CGFloat(selected) * CGFloat(currentSet) / CGFloat(exercises.count) * CGFloat(sets)
                     playButton.icon = auto ? pause : rest
                 case .Resting:
                     resetTimer(with: exercises[selected].rest)
@@ -119,7 +120,7 @@ class ViewController: UIViewController {
             currentExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
             timerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            timerLabel.topAnchor.constraint(equalTo: currentExercise.bottomAnchor, constant: 24),
+            timerLabel.topAnchor.constraint(equalTo: currentExercise.bottomAnchor, constant: 36),
 
             playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32)
@@ -170,7 +171,7 @@ class ViewController: UIViewController {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] timer in
             guard let self = self else { return }
             self.time -= 1
-            self.currentExercise.updateBorderTo(self.loadingPercentage)
+            self.currentExercise.exercisePercentage = self.loadingPercentage
         })
         timer?.fire()
     }
