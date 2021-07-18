@@ -23,18 +23,8 @@ class ExerciseView: UIView {
         return v
     }()
 
-    lazy var exerciseRing: CAShapeLayer = {
-        let circle = CAShapeLayer()
-        let width: CGFloat = 12
-        let circularPath = UIBezierPath(arcCenter: CGPoint(x: rad, y: rad), radius: rad + width/2 + 4, startAngle: -(.pi/2), endAngle: .pi * 1.5, clockwise: true)
-        circle.path = circularPath.cgPath
-        circle.strokeColor = UIColor.blue.cgColor
-        circle.lineWidth = width
-        circle.fillColor = UIColor.clear.cgColor
-        circle.strokeEnd = 0
-        circle.lineCap = .round
-
-        return circle
+    lazy var exerciseRing: TimerRing = {
+        return TimerRing(center: CGPoint(x: rad, y: rad), radius: rad)
     }()
 
     var rad: CGFloat = 0
