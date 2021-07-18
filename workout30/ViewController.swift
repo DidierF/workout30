@@ -25,20 +25,17 @@ class ViewController: UIViewController {
                     selected += 1
                     resetTimer(with: exercises[selected].time)
                     playButton.icon = auto ? pause : rest
-                    break
                 case .Resting:
                     resetTimer(with: exercises[selected].rest)
                     if !auto {
                         playButton.icon = play
                     }
-                    break
                 default:
                     selected = -1
                     currentSet = 1
                     time = 0
                     timer?.invalidate()
                     playButton.icon = play
-                    break
             }
         }
     }
@@ -171,9 +168,24 @@ class ViewController: UIViewController {
         }
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] timer in
-            self?.time -= 1
+            guard let self = self else { return }
+            self.time -= 1
+            self.currentExercise.updateBorderTo(self.loadingPercentage)
         })
         timer?.fire()
+    }
+
+    private var loadingPercentage: CGFloat {
+        switch self.state {
+        case .Running:
+            let total: CGFloat = CGFloat(self.exercises[self.selected].time)
+            return 1 - (CGFloat(self.time) / total)
+        case .Resting:
+            let total: CGFloat = CGFloat(self.exercises[self.selected].rest)
+            return (CGFloat(self.time) / total)
+        default:
+            return 0
+        }
     }
 
     private func onTimerEnd() {
