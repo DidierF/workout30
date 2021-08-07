@@ -97,6 +97,7 @@ class ViewController: UIViewController {
         l.adjustsFontSizeToFitWidth = true
         l.lineBreakMode = .byTruncatingTail
         l.textAlignment = .center
+        l.textColor = .black
 
         return l
     }()
@@ -107,6 +108,7 @@ class ViewController: UIViewController {
         l.font = UIFont.systemFont(ofSize: 20)
         l.numberOfLines = 1
         l.textAlignment = .center
+        l.textColor = .black
         return l
     }()
 
