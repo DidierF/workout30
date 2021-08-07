@@ -55,24 +55,26 @@ class ExerciseView: UIView {
 
     var rad: CGFloat = 0
 
-    init(radius: CGFloat) {
+    init(size: CGFloat) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         addShadow()
 
-        rad = radius
+        rad = size/2
 
         layer.addSublayer(exerciseRing)
         layer.addSublayer(workoutRing)
 
-        layer.cornerRadius = radius
+        layer.cornerRadius = rad
         clipsToBounds = false
 
-        container.layer.cornerRadius = radius
+        container.layer.cornerRadius = rad
         container.addSubview(image)
 
         addSubview(container)
         NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: size),
+            widthAnchor.constraint(equalToConstant: size),
             container.topAnchor.constraint(equalTo: topAnchor),
             container.bottomAnchor.constraint(equalTo: bottomAnchor),
             container.leftAnchor.constraint(equalTo: leftAnchor),
