@@ -72,13 +72,16 @@ class ViewController: UIViewController {
 
     lazy var currentExercise: ExerciseView = {
         let size: CGFloat = 272
-        let e = ExerciseView(radius: size/2)
-        NSLayoutConstraint.activate([
-            e.heightAnchor.constraint(equalToConstant: size),
-            e.widthAnchor.constraint(equalToConstant: size)
-        ])
+        let e = ExerciseView(size: size)
         e.backgroundColor = .white
+        return e
+    }()
 
+    lazy var nextExercise: ExerciseView = {
+        let size: CGFloat = 150
+        let e = ExerciseView(size: size)
+        e.layer.opacity = 0.5
+        e.backgroundColor = .blue
         return e
     }()
 
@@ -118,14 +121,20 @@ class ViewController: UIViewController {
         WorkoutService().getWorkout(completion: refreshWorkout)
         view.backgroundColor = Asset.Colors.background.color
 
-        view.addSubviews([exerciseTitle, currentExercise, playButton, timerLabel])
+        let screenW = UIScreen.main.bounds.width
+
+        view.addSubviews([nextExercise, exerciseTitle, currentExercise, playButton, timerLabel])
         NSLayoutConstraint.activate([
             exerciseTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
             exerciseTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
             exerciseTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
 
+            nextExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: screenW/4),
+//            nextExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
+            nextExercise.topAnchor.constraint(equalTo: exerciseTitle.bottomAnchor, constant: 16),
+
             currentExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            currentExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            currentExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
 
             timerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             timerLabel.topAnchor.constraint(equalTo: currentExercise.bottomAnchor, constant: 36),
@@ -141,8 +150,17 @@ class ViewController: UIViewController {
     }
 
     private func refreshViews() {
-        let main = selected == -1 ? exercises[0] : exercises[selected]
+        let mainIndex = selected == -1 ? 0 : selected
+        let main = exercises[mainIndex]
         currentExercise.image.sd_setImage(with: storage.reference(withPath: main.image), placeholderImage: nil)
+        if mainIndex < exercises.count {
+            nextExercise.isHidden = false
+            let next = exercises[mainIndex+1]
+            nextExercise.image.sd_setImage(with: storage.reference(withPath: next.image))
+            nextExercise.isHidden = false
+        } else {
+            nextExercise.isHidden = true
+        }
         exerciseTitle.text = main.name
         timerLabel.text = L10n.Exercise.timer(time/60, time%60)
     }
