@@ -130,7 +130,6 @@ class ViewController: UIViewController {
             exerciseTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
 
             nextExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: screenW/4),
-//            nextExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
             nextExercise.topAnchor.constraint(equalTo: exerciseTitle.bottomAnchor, constant: 16),
 
             currentExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -153,8 +152,7 @@ class ViewController: UIViewController {
         let mainIndex = selected == -1 ? 0 : selected
         let main = exercises[mainIndex]
         currentExercise.image.sd_setImage(with: storage.reference(withPath: main.image), placeholderImage: nil)
-        if mainIndex < exercises.count {
-            nextExercise.isHidden = false
+        if mainIndex < exercises.count - 1 {
             let next = exercises[mainIndex+1]
             nextExercise.image.sd_setImage(with: storage.reference(withPath: next.image))
             nextExercise.isHidden = false
