@@ -61,7 +61,7 @@ class ExerciseCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = L10n.Exercise.exercise
-        l.textColor = Asset.text.color
+        l.textColor = Asset.Colors.text.color
         return l
     }()
 
@@ -69,14 +69,14 @@ class ExerciseCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textAlignment = .right
-        l.textColor = Asset.text.color
+        l.textColor = Asset.Colors.text.color
         return l
     }()
 
     private lazy var divider: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = Asset.divider.color
+        v.backgroundColor = Asset.Colors.divider.color
         return v
     }()
 

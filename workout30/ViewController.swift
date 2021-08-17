@@ -8,166 +8,253 @@
 import UIKit
 import FirebaseStorage
 import FirebaseUI
+import AVFoundation
 
 class ViewController: UIViewController {
 
-    var excercises: [Exercise] = []
+    var exercises: [Exercise] = []
     var selected = -1
     var currentSet = 1
+
+    var auto = true
+    var sets = 1
+
+    var startSound = Asset.Sounds.start.data
+    var restSound = Asset.Sounds.end.data
+
     var state: ExerciseState = .NotStarted {
         didSet {
-            switch state {
-                case .Running:
-                    nextButton.setTitle(strings.Button.rest, for: .normal)
-                case .Resting:
-                    if (selected == excercises.count - 1) {
-                        nextButton.setTitle(strings.Button.finish, for: .normal)
-                        break
-                    }
-                    nextButton.setTitle(strings.Button.next, for: .normal)
-                default:
-                    nextButton.setTitle(strings.Button.start, for: .normal)
-            }
+            handleStateChange(state)
         }
     }
 
     let strings = L10n.Workout.self
     let storage = Storage.storage()
+    let play = Asset.Images.play.image
+    let pause = Asset.Images.pause.image
+    let rest = Asset.Images.rest.image
 
-    var auto = false {
+    var timer: Timer?
+    private var time: Int = 0 {
         didSet {
-            navigationItem.rightBarButtonItem?.tintColor = auto ? Asset.toggleOn.color : Asset.toggleOff.color
+            refreshViews()
+            if time < 0 {
+                timer?.invalidate()
+                onTimerEnd()
+            }
         }
     }
-    var sets = 2
-
-    lazy var nextButton: UIButton = {
-        let b = UIButton()
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        b.setTitle(strings.Button.start, for: .normal)
-        b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
-        b.backgroundColor = Asset.button.color
-        b.titleLabel?.textColor = Asset.buttonText.color
-
-        return b
-    }()
-
-    lazy var table: UITableView = {
-        let t = UITableView()
-        t.translatesAutoresizingMaskIntoConstraints = false
-        t.delegate = self
-        t.dataSource = self
-        t.backgroundColor = .clear
-        t.separatorColor = .clear
-        t.register(ExerciseCell.self, forCellReuseIdentifier: ExerciseCell.identifier)
-        return t
-    }()
 
     @objc private func toggleAuto() {
-        print(state)
         if state == .NotStarted {
             auto = !auto
         }
     }
 
+    lazy var currentExercise: ExerciseView = {
+        let size: CGFloat = 272
+        let e = ExerciseView(size: size)
+        e.backgroundColor = .white
+        return e
+    }()
+
+    lazy var nextExercise: ExerciseView = {
+        let size: CGFloat = 150
+        let e = ExerciseView(size: size)
+        e.layer.opacity = 0.5
+        return e
+    }()
+
+    lazy var playButton: ActionButton = {
+        let b = ActionButton(size: 100)
+        b.icon = play
+        b.addTarget(self, action: #selector(onNextPress), for: .touchUpInside)
+        return b
+    }()
+
+    let exerciseTitle: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.boldSystemFont(ofSize: 34)
+        l.numberOfLines = 1
+        l.adjustsFontSizeToFitWidth = true
+        l.lineBreakMode = .byTruncatingTail
+        l.textAlignment = .center
+        l.textColor = .black
+
+        return l
+    }()
+
+    let timerLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.systemFont(ofSize: 20)
+        l.numberOfLines = 1
+        l.textAlignment = .center
+        l.textColor = .black
+        return l
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = strings.title
         WorkoutService().getWorkout(completion: refreshWorkout)
+        view.backgroundColor = Asset.Colors.background.color
 
-        view.addSubviews([nextButton, table])
+        let screenW = UIScreen.main.bounds.width
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: strings.Button.auto, style: .plain, target: self, action: #selector(toggleAuto))
-        auto = false
-
+        view.addSubviews([nextExercise, exerciseTitle, currentExercise, playButton, timerLabel])
         NSLayoutConstraint.activate([
-            table.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            table.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            table.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            exerciseTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
+            exerciseTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            exerciseTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
 
-            nextButton.topAnchor.constraint(equalTo: table.bottomAnchor),
-            nextButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            nextButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            nextExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: screenW/4),
+            nextExercise.topAnchor.constraint(equalTo: exerciseTitle.bottomAnchor, constant: 16),
+
+            currentExercise.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            currentExercise.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
+
+            timerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            timerLabel.topAnchor.constraint(equalTo: currentExercise.bottomAnchor, constant: 36),
+
+            playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32)
         ])
-        
-    }
-
-    override func viewWillLayoutSubviews() {
-        view.backgroundColor = Asset.background.color
     }
 
     private func refreshWorkout(_ newExercises: [Exercise]) {
-        self.excercises = newExercises
-        self.table.reloadData()
+        self.exercises = newExercises
+        refreshViews()
+    }
+
+    private func refreshViews() {
+        let mainIndex = selected == -1 ? 0 : selected
+        let main = exercises[mainIndex]
+        currentExercise.image.sd_setImage(with: storage.reference(withPath: main.image), placeholderImage: nil)
+        if mainIndex < exercises.count - 1 {
+            let next = exercises[mainIndex+1]
+            nextExercise.image.sd_setImage(with: storage.reference(withPath: next.image))
+            nextExercise.isHidden = false
+        } else {
+            nextExercise.isHidden = true
+        }
+        exerciseTitle.text = main.name
+        timerLabel.text = L10n.Exercise.timer(time/60, time%60)
     }
 
     @objc private func onNextPress() {
-        if !auto {
+        if !auto || state == .NotStarted {
             cycleExercise()
             return
         }
+        pauseTimer()
     }
 
     private func cycleExercise() {
         if (state == .Running) {
             state = .Resting
-        } else if (selected == excercises.count - 1) {
+        } else if (selected == exercises.count - 1) {
             if currentSet == sets {
-                nextButton.isHidden = false
-                state = .NotStarted
-                selected = -1
-                currentSet = 1
+                state = .Ended
             } else {
                 currentSet += 1
                 selected = 0
                 state = .Running
             }
         } else {
-            nextButton.isHidden = auto
             state = .Running
-            selected += 1
         }
-        table.reloadData()
     }
 
-    @objc private func onTimerEnd() {
+    private func resetTimer(with time: Int? = nil) {
+        if time != nil {
+            self.time = time! + 1
+        }
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] timer in
+            guard let self = self else { return }
+            self.time -= 1
+            self.currentExercise.exercisePercentage = self.loadingPercentage
+        })
+        timer?.fire()
+    }
+
+    private var loadingPercentage: CGFloat {
+        switch self.state {
+        case .Running:
+            let total: CGFloat = CGFloat(self.exercises[self.selected].time)
+            return 1 - (CGFloat(self.time) / total)
+        case .Resting:
+            let total: CGFloat = CGFloat(self.exercises[self.selected].rest)
+            return (CGFloat(self.time) / total)
+        default:
+            return 0
+        }
+    }
+
+    private func onTimerEnd() {
         if auto {
             cycleExercise()
         }
     }
 
-}
-
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = (tableView.dequeueReusableCell(withIdentifier: ExerciseCell.identifier) ?? ExerciseCell()) as! ExerciseCell
-        let row = indexPath.row
-        let ex = excercises[row]
-
-        cell.title = ex.name
-        cell.time = row == selected && state == .Resting ? ex.rest : ex.time
-        let imgReference = storage.reference(withPath: ex.image)
-        cell.image.sd_setImage(with: imgReference, placeholderImage: nil)
-        if row == selected {
-            cell.state = state
-            cell.onTimerEnd = onTimerEnd
-        } else if row < selected {
-            cell.state = .Ended
+    private func pauseTimer() {
+        if timer?.isValid ?? false {
+            timer?.invalidate()
+            playButton.icon = play
         } else {
-            cell.state = .NotStarted
+            resetTimer()
+            playButton.icon = pause
         }
-        return cell
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        excercises.count
+    var player: AVAudioPlayer?
+
+    private func playSound(_ soundData: Data) {
+        do {
+            /// this codes for making this app ready to takeover the device audio
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+
+            /// change fileTypeHint according to the type of your audio file (you can omit this)
+
+//            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3)
+            player = try AVAudioPlayer(data: soundData, fileTypeHint: "wav")
+
+            // no need for prepareToPlay because prepareToPlay is happen automatically when calling play()
+            player!.play()
+        } catch let error as NSError {
+            print("error: \(error.localizedDescription)")
+        }
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        UITableView.automaticDimension
-    }
 }
 
+extension ViewController {
+    private func handleStateChange(_ newState: ExerciseState) {
+        switch state {
+        case .Running:
+            playSound(startSound.data)
+            selected += 1
+            resetTimer(with: exercises[selected].time)
+            currentExercise.workoutPercentage = CGFloat(selected) * CGFloat(currentSet) / CGFloat(exercises.count) * CGFloat(sets)
+            playButton.icon = auto ? pause : rest
+        case .Resting:
+            playSound(restSound.data)
+            resetTimer(with: exercises[selected].rest)
+            if !auto {
+                playButton.icon = play
+            }
+        case .Ended:
+            currentExercise.workoutPercentage = 1
+            state = .NotStarted
+        case .NotStarted:
+            selected = -1
+            currentSet = 1
+            time = 0
+            timer?.invalidate()
+            playButton.icon = play
+        }
+    }
+}
