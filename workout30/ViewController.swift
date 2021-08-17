@@ -24,26 +24,7 @@ class ViewController: UIViewController {
 
     var state: ExerciseState = .NotStarted {
         didSet {
-            switch state {
-                case .Running:
-                    playSound(startSound.data)
-                    selected += 1
-                    resetTimer(with: exercises[selected].time)
-                    currentExercise.workoutPercentage = CGFloat(selected) * CGFloat(currentSet) / CGFloat(exercises.count) * CGFloat(sets)
-                    playButton.icon = auto ? pause : rest
-                case .Resting:
-                    playSound(restSound.data)
-                    resetTimer(with: exercises[selected].rest)
-                    if !auto {
-                        playButton.icon = play
-                    }
-                default:
-                    selected = -1
-                    currentSet = 1
-                    time = 0
-                    timer?.invalidate()
-                    playButton.icon = play
-            }
+            handleStateChange(state)
         }
     }
 
@@ -81,7 +62,6 @@ class ViewController: UIViewController {
         let size: CGFloat = 150
         let e = ExerciseView(size: size)
         e.layer.opacity = 0.5
-        e.backgroundColor = .blue
         return e
     }()
 
@@ -176,7 +156,7 @@ class ViewController: UIViewController {
             state = .Resting
         } else if (selected == exercises.count - 1) {
             if currentSet == sets {
-                state = .NotStarted
+                state = .Ended
             } else {
                 currentSet += 1
                 selected = 0
@@ -249,4 +229,32 @@ class ViewController: UIViewController {
         }
     }
 
+}
+
+extension ViewController {
+    private func handleStateChange(_ newState: ExerciseState) {
+        switch state {
+        case .Running:
+            playSound(startSound.data)
+            selected += 1
+            resetTimer(with: exercises[selected].time)
+            currentExercise.workoutPercentage = CGFloat(selected) * CGFloat(currentSet) / CGFloat(exercises.count) * CGFloat(sets)
+            playButton.icon = auto ? pause : rest
+        case .Resting:
+            playSound(restSound.data)
+            resetTimer(with: exercises[selected].rest)
+            if !auto {
+                playButton.icon = play
+            }
+        case .Ended:
+            currentExercise.workoutPercentage = 1
+            state = .NotStarted
+        case .NotStarted:
+            selected = -1
+            currentSet = 1
+            time = 0
+            timer?.invalidate()
+            playButton.icon = play
+        }
+    }
 }
