@@ -77,6 +77,7 @@ class ViewController: UIViewController {
     lazy var settings: ActionButton = {
         let b = ActionButton(size: 50)
         b.icon = Asset.Images.gear.image
+        b.addTarget(self, action: #selector(onSettingsPress), for: .touchUpInside)
         return b
     }()
 
@@ -160,6 +161,11 @@ class ViewController: UIViewController {
             return
         }
         pauseTimer()
+    }
+
+    @objc private func onSettingsPress() {
+        let n = UINavigationController(rootViewController: SettingsViewController())
+        navigationController?.present(n, animated: true, completion: nil)
     }
 
     private func cycleExercise() {
