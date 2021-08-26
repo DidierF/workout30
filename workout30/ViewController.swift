@@ -34,6 +34,8 @@ class ViewController: UIViewController {
     let pause = Asset.Images.pause.image
     let rest = Asset.Images.rest.image
 
+    let buttonMargin = (UIScreen.main.bounds.width - 200) / 4
+
     var timer: Timer?
     private var time: Int = 0 {
         didSet {
@@ -72,6 +74,12 @@ class ViewController: UIViewController {
         return b
     }()
 
+    lazy var settings: ActionButton = {
+        let b = ActionButton(size: 50)
+        b.icon = Asset.Images.gear.image
+        return b
+    }()
+
     let exerciseTitle: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -103,7 +111,7 @@ class ViewController: UIViewController {
 
         let screenW = UIScreen.main.bounds.width
 
-        view.addSubviews([nextExercise, exerciseTitle, currentExercise, playButton, timerLabel])
+        view.addSubviews([nextExercise, exerciseTitle, currentExercise, playButton, timerLabel, settings])
         NSLayoutConstraint.activate([
             exerciseTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
             exerciseTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
@@ -119,7 +127,10 @@ class ViewController: UIViewController {
             timerLabel.topAnchor.constraint(equalTo: currentExercise.bottomAnchor, constant: 36),
 
             playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32)
+            playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32),
+
+            settings.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
+            settings.centerXAnchor.constraint(equalTo: view.leftAnchor, constant: buttonMargin + 25),
         ])
     }
 

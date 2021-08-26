@@ -35,6 +35,7 @@ internal enum Asset {
     internal static let pause = ImageAsset(name: "Pause")
     internal static let play = ImageAsset(name: "Play")
     internal static let rest = ImageAsset(name: "Rest")
+    internal static let gear = ImageAsset(name: "gear")
   }
   internal enum Sounds {
     internal static let end = DataAsset(name: "End")
